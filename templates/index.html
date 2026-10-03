@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Inventory Management</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .form-box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-button {
+            background: #222;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            background: white;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Inventory Management System</h1>
+
+
+    <div class="form-box">
+
+        <h2>Add Product</h2>
+
+        <form action="/add" method="POST">
+
+            <label>Product Name</label>
+
+            <input
+                type="text"
+                name="name"
+                placeholder="Enter product name"
+                required
+            >
+
+
+            <label>Quantity</label>
+
+            <input
+                type="number"
+                name="quantity"
+                placeholder="Enter quantity"
+                min="0"
+                required
+            >
+
+
+            <label>Location</label>
+
+            <input
+                type="text"
+                name="location"
+                placeholder="Example: Bedroom"
+            >
+
+
+            <button class="add-button" type="submit">
+                Add Product
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <h2>Products</h2>
+
+
+    <table>
+
+        <tr>
+
+            <th>ID</th>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Location</th>
+            <th>QR</th>
+
+        </tr>
+
+
+        {% for product in products %}
+
+        <tr>
+
+            <td>
+                {{ product.id }}
+            </td>
+
+            <td>
+                {{ product.name }}
+            </td>
+
+            <td>
+                {{ product.quantity }}
+            </td>
+
+            <td>
+                {{ product.location }}
+            </td>
+
+            <td>
+
+                <a href="/product/{{ product.id }}">
+                    Open
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+</body>
+
+</html>

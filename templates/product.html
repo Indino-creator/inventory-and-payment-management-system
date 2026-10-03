@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Product {{ product.id }}</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .save {
+            background: #222;
+            color: white;
+        }
+
+        .delete {
+            background: #d33;
+            color: white;
+        }
+
+        .qr {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .qr img {
+            width: 250px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>Product #{{ product.id }}</h1>
+
+
+        <form
+            action="/update/{{ product.id }}"
+            method="POST"
+        >
+
+            <label>Product Name</label>
+
+            <input
+                type="text"
+                name="name"
+                value="{{ product.name }}"
+                required
+            >
+
+
+            <label>Quantity</label>
+
+            <input
+                type="number"
+                name="quantity"
+                value="{{ product.quantity }}"
+                min="0"
+                required
+            >
+
+
+            <label>Location</label>
+
+            <input
+                type="text"
+                name="location"
+                value="{{ product.location }}"
+            >
+
+
+            <button
+                class="save"
+                type="submit"
+            >
+                Save Changes
+            </button>
+
+        </form>
+
+
+        <br>
+
+
+        <form
+            action="/delete/{{ product.id }}"
+            method="POST"
+            onsubmit="return confirm('Delete this product?');"
+        >
+
+            <button
+                class="delete"
+                type="submit"
+            >
+                Delete Product
+            </button>
+
+        </form>
+
+
+        <div class="qr">
+
+            <h2>Product QR Code</h2>
+
+            <img
+                src="/static/qr_codes/product_{{ product.id }}.png"
+                alt="QR Code"
+            >
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
