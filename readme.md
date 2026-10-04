@@ -63,6 +63,8 @@ About the files and the foldes of this project
 - app.py
   - Here we will use flask to make the webpage for the payment ans other details 
 
+- gitignore
+ - we will use this to store our database pass and all
 
 
 Basic Features for user having no subscription 
