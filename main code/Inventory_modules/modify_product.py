@@ -8,7 +8,7 @@ try:
         host="localhost",
         database="inventory",
         user="root",
-        password="Armaan"
+        password="-----"
     )
     
     if connection.is_connected():
