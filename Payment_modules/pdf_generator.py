@@ -7,6 +7,15 @@ from reportlab.lib.units import inch
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from payments_insert import loc
+import os
+import sys
+
+# 1. Add the root project directory ('just a cs project') to Python's path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+# 2. Import your database modules
+from database_connections.Database_end import end_connection 
+from database_connections.database_connect import establish_conn,cursor,conn
 
 # 1. Prompt user for the Payment ID at runtime
 target_payment_id = loc
@@ -15,15 +24,9 @@ connection = None
 cursor = None
 
 try:
-    # 2. Connect to your MySQL database
-    connection = mysql.connector.connect(
-        host="localhost",
-        user="root",         # Replace with your MySQL username
-        password="----",     # Replace with your MySQL password
-        database="inventory" # Replace with your database name
-    )
+    establish_conn()
     
-    cursor = connection.cursor(dictionary=True)
+    cursor = conn.cursor(dictionary=True)
     
     # 3. Fetch the live record from the database
     query = "SELECT * FROM payments WHERE PAYMENT_ID = %s"

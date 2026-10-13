@@ -1,19 +1,22 @@
 from payments_insert import loc
 import mysql.connector
+import os
+import sys
+
+# 1. Add the root project directory ('just a cs project') to Python's path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+# 2. Import your database modules
+from database_connections.Database_end import end_connection 
+from database_connections.database_connect import establish_conn,cursor,conn
 
 # Prompt user to enter a Payment ID dynamically
 target_payment_id = loc
 
 try:
-    # 1. Connect to your MySQL database
-    connection = mysql.connector.connect(
-        host="localhost",
-        user="root",       # Replace with your MySQL username
-        password="----",   # Replace with your MySQL password
-        database="inventory" # Replace with your database name
-    )
+    establish_conn()
     
-    cursor = connection.cursor(dictionary=True)
+    cursor = conn.cursor(dictionary=True)
     
     # 2. Fetch the live record from the database
     query = "SELECT * FROM payments WHERE PAYMENT_ID = %s"
@@ -46,6 +49,6 @@ except mysql.connector.Error as err:
     
 finally:
     # Close connection properly
-    if 'connection' in locals() and connection.is_connected():
+    if 'connection' in locals() and conn.is_connected():
         cursor.close()
-        connection.close()
+        conn.close()
