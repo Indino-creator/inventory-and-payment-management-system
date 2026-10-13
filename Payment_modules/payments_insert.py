@@ -8,8 +8,8 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # 2. Import your database modules
-from database_connections.Database_end import end_connection 
-from database_connections.database_connect import establish_conn,cursor
+from main_code.database_connections.database_connect import establish_conn, cursor, conn
+from main_code.database_connections.Database_end import end_connection
 establish_conn()
 
 # Initialize global variable to prevent potential NameErrors

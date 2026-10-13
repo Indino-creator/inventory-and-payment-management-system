@@ -1,15 +1,15 @@
 from payments_insert import loc
 import mysql.connector
+
 import os
 import sys
 
-# 1. Add the root project directory ('just a cs project') to Python's path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+# Go up two directories to reach 'just a cs project', then into 'main code'
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-# 2. Import your database modules
-from database_connections.Database_end import end_connection 
-from database_connections.database_connect import establish_conn,cursor,conn
-
+# Now import using the 'main code' path prefix
+from main_code.database_connections.database_connect import establish_conn, cursor, conn
+from main_code.database_connections.Database_end import end_connection
 # Prompt user to enter a Payment ID dynamically
 target_payment_id = loc
 

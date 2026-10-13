@@ -1,19 +1,16 @@
 'here we will make a python program to insert a product in to mysql database'
 import mysql.connector
 
+import os
+import sys
 
-  # Establish connection
-conn = mysql.connector.connect(
-    host="localhost",       # or your database host
-    user="root",   # MySQL username
-    password="#####", # MySQL password
-    database="inventory" # Optional: specific database
-)
-cursor=conn.cursor()
+# 1. Add the root directory to path to access database connections
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-# Verify connection
-if conn.is_connected():
-    print("Connected to MySQL database")
+from database_connections.database_connect import establish_conn, cursor, conn
+from database_connections.Database_end import end_connection
+
+establish_conn()
 
 
 def insert_product():
@@ -34,24 +31,6 @@ INSERT INTO groceries
 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
 '''
     values=(Product_brand,Product_name,Product_description,Product_quantity,Purchase_price,our_price,selling_price,Product_weight)
-
-    try:
-        # 4. Execute the query
-        cursor.execute(query, values)
-        
-        # 5. Commit the transaction
-        conn.commit()
-        print(f"Record inserted successfully. ID: {cursor.lastrowid}")
-        print("Thanks for using our software")
-        
-    except mysql.connector.Error as error:
-        # Rollback in case of error
-        conn.rollback()
-        print(f"Failed to insert record: {error}")
-    finally:
-        # 6. Close resources
-        if conn.is_connected():
-            cursor.close()
-            conn.close()
+    end_connection(query,values)
 
 insert_product()
