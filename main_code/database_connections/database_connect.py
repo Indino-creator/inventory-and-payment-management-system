@@ -4,7 +4,7 @@ import mysql.connector # Or sqlite3 depending on what you are using
 conn = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="Armaan",      # Replace with your MySQL password
+    password="Ar$$$",      # Replace with your MySQL password
     database="inventory"  # Replace with your database name
 )
 
