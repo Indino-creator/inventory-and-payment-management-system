@@ -29,7 +29,7 @@ def check_low_stock():
         if not low_stock_items:
             print("Stock levels are healthy. No items are running low.")
         else:
-            print("\n⚠️ LOW STOCK ALERT ⚠️")
+            print("\nLOW STOCK ALERT")
             print("-" * 50)
             for item in low_stock_items:
                 product_name, brand, quantity = item

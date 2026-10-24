@@ -34,7 +34,7 @@ def find_stock():
         if not results:
             print(f"\nNo products found matching '{search_term}'.")
         else:
-            print(f"\n🔍 SEARCH RESULTS FOR '{search_term}' 🔍")
+            print(f"\nSEARCH RESULTS FOR '{search_term}'")
             print("-" * 60)
             for item in results:
                 product_name, brand, quantity = item
