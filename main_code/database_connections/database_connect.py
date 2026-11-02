@@ -15,3 +15,37 @@ cursor = conn.cursor()
 def establish_conn():
     if conn.is_connected():
         print("Database connected successfully!")
+    else:
+      try:
+          cursor.exceute("""
+            create database IF NOT EXIST Inventory
+          """)
+  
+          cursor.excute("""
+          CREATE TABLE IF NOT EXISTS products (
+              product_id INT AUTO_INCREMENT PRIMARY KEY,
+              product_brand VARCHAR(55) NOT NULL,
+              product_name VARCHAR(55) NOT NULL,
+              description VARCHAR(55),
+              product_quantity INT NOT NULL,
+              purchase_price INT NOT NULL,
+              our_cost INT NOT NULL,
+              selling_price INT NOT NULL,
+              product_weight VARCHAR(55) NOT NULL,
+              registration_date DATETIME,
+              modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+              ON UPDATE CURRENT_TIMESTAMP
+          )
+          """)    
+  
+          conn.commit()
+  
+          print("The Database is ready sir we are go to go ")
+
+      except mysql.connector.Error as e:
+          print("Mysql:",e)
+      finally:
+          if "cursor" in locals():
+              cursor.close()
+          if 'con' in locals and conn.is_connected():
+              conn.close()       
