@@ -13,10 +13,27 @@ cursor = conn.cursor()
 
 # Optional: Keep your establish_conn function if you want a print message or extra checks
 def establish_conn():
+    conn = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="Ar$$$",      # Replace with your MySQL password
+    database="inventory"  # Replace with your database name
+)
+
+# 2. Create the cursor at the top level
+    cursor = conn.cursor()
+
     if conn.is_connected():
         print("Database connected successfully!")
     else:
       try:
+          conn=mysql.connector.connect(
+           host="localhost",
+           user="root",
+           password="####"
+        )
+
+          
           cursor.exceute("""
             create database IF NOT EXIST Inventory
           """)
