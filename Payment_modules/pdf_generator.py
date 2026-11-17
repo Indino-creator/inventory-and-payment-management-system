@@ -1,47 +1,47 @@
 import os
-from print_bill import print_invoice
+import sys
 import mysql.connector
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.units import inch
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from payments_insert import loc
-import os
-import sys
 
-# 1. Add the root project directory ('just a cs project') to Python's path
+# 1. Add the root project directory to Python's path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-# 2. Import your database modules
+# 2. Import your database modules and print function
 from main_code.database_connections.database_connect import establish_conn, cursor, conn
-from main_code.database_connections.Database_end import end_connection
+from print_bill import print_invoice
 
-# 1. Prompt user for the Payment ID at runtime
-target_payment_id = loc
+def generate_and_print_invoice():
+    # Prompt user for the Payment ID at runtime
+    target_payment_id = input("Enter the Payment ID: ").strip()
+    
+    if not target_payment_id:
+        print("Payment ID cannot be empty.")
+        return
 
-connection = None
-cursor = None
+    cur = None
 
-try:
-    establish_conn()
-    
-    cursor = conn.cursor(dictionary=True)
-    
-    # 3. Fetch the live record from the database
-    query = "SELECT * FROM payments WHERE PAYMENT_ID = %s"
-    cursor.execute(query, (target_payment_id,))
-    record = cursor.fetchone()
-    
-    if not record:
-        print(f"\nNo payment record found with ID: {target_payment_id}")
-    else:
-        output_folder = "invoices"  # Or an absolute path like "C:/Users/LENOVO/Desktop/Invoices"
+    try:
+        establish_conn()
         
-        # Create the folder if it doesn't already exist
+        # Use connection cursor safely
+        cur = conn.cursor(dictionary=True)
+        
+        # 3. Fetch the live record from the database
+        query = "SELECT * FROM payments WHERE PAYMENT_ID = %s"
+        cur.execute(query, (target_payment_id,))
+        record = cur.fetchone()
+        
+        if not record:
+            print(f"\nNo payment record found with ID: {target_payment_id}")
+            return
+            
+        output_folder = "invoices"
         os.makedirs(output_folder, exist_ok=True)
         
-        # Combine the folder path and filename securely
         filename = os.path.join(output_folder, f"Invoice_{record['PAYMENT_ID']}.pdf")
         
         # Setup document layout
@@ -123,7 +123,7 @@ try:
             [
                 Paragraph(f"<b>{record['PRODUCT_NAME']}</b><br/>Brand: {record['PRODUCT_BRAND']}<br/><font color='#64748B'>{record['DESCRIPTION']}</font>", body_style),
                 Paragraph(f"{record['PAYMENT_TYPE']}<br/>({record['PAYMENT_METHOD']})", body_style),
-                Paragraph(f"${record['AMOUNT']:,.2f}", right_bold)
+                Paragraph(f"₹{record['AMOUNT']:,.2f}", right_bold)
             ]
         ]
         
@@ -146,7 +146,7 @@ try:
         
         # Total Summary Table
         total_data = [
-            ["Total Paid:", f"${record['AMOUNT']:,.2f}"]
+            ["Total Paid:", f"₹{record['AMOUNT']:,.2f}"]
         ]
         total_table = Table(total_data, colWidths=[5.0 * inch, 1.5 * inch])
         total_table.setStyle(TableStyle([
@@ -174,14 +174,23 @@ try:
         doc.build(story)
         print(f"\nSuccess! PDF saved locally as: {filename}")
 
-        print_invoice(filename)
+        # Ask user if they want to print the invoice
+        print_choice = input("Do you want to print this invoice now? (y/n): ").strip().lower()
+        if print_choice in ['y', 'yes']:
+            print("Sending invoice to printer...")
+            print_invoice(filename)
+        else:
+            print("Printing skipped. You can find your PDF in the 'invoices' folder.")
 
-except mysql.connector.Error as err:
-    print(f"Database Error: {err}")
-    
-finally:
-    # Safely close database connections
-    if cursor is not None:
-        cursor.close()
-    if connection is not None and connection.is_connected():
-        connection.close()
+    except mysql.connector.Error as err:
+        print(f"Database Error: {err}")
+        
+    finally:
+        # Safely close database connections manually
+        if cur is not None:
+            cur.close()
+        if conn is not None and conn.is_connected():
+            conn.close()
+
+if __name__ == "__main__":
+    generate_and_print_invoice()
